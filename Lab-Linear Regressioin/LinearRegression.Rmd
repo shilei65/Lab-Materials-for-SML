@@ -1,0 +1,67 @@
+---
+title: "Linear Regression on the Advertising Data"
+output: html_document
+date: "2024-02-08"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Import libraries
+
+
+```{r}
+library(MASS)
+library(ISLR)
+```
+
+## Import data
+
+```{r}
+Advertising=read.csv("../data/Advertising.csv")
+Advertising[1:10,]
+```
+
+## Visualize data
+```{r}
+pairs(Advertising[,-1])
+```
+
+## Simple Linear Regression
+```{r}
+attach(Advertising)
+lm.fit=lm(Sales~TV)
+lm.fit
+summary(lm.fit)
+cor(Sales, TV)
+```
+
+## Prediction
+```{r}
+confint(lm.fit, level = 0.9)
+predict(lm.fit,data.frame(TV=(c(5,10,15))), interval="confidence")
+predict(lm.fit,data.frame(TV=(c(5,10,15))), interval="prediction")
+plot(TV,Sales)
+abline(lm.fit,lwd=3,col="red")
+```
+
+## Multiple Linear Regression
+```{r}
+lm.fit=lm(Sales~TV+Radio,data=Advertising)
+lm.fit
+summary(lm.fit)
+```
+
+##  Non-linear
+```{r}
+lm.fit1=lm(Sales~log(TV) + Radio, data=Advertising)
+summary(lm.fit1)
+```
+
+## Interaction Terms
+```{r}
+lm.fit2 =lm(Sales~TV*Radio,data=Advertising)
+summary(lm.fit2)
+```
+

@@ -1,0 +1,46 @@
+---
+title: "Logistic Regression on the Stock Market Data"
+output: html_document
+date: "2024-02-08"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Import libraries
+
+
+```{r}
+library(ISLR)
+```
+
+
+## Visualize data
+```{r}
+names(Smarket)
+dim(Smarket)
+summary(Smarket)
+pairs(Smarket)
+cor(Smarket[,-9])
+attach(Smarket)
+plot(Volume)
+```
+
+## Logistic Regression
+```{r}
+glm.fit=glm(Direction~Lag1+Lag2+Lag3+Lag4+Lag5+Volume,data=Smarket,family=binomial)
+summary(glm.fit)
+```
+
+## Prediction
+```{r}
+glm.probs=predict(glm.fit,type="response")
+glm.probs[1:10]
+contrasts(Direction)
+glm.pred=rep("Down",1250)
+glm.pred[glm.probs>.5]="Up"
+table(glm.pred,Direction)
+(507+145)/1250
+mean(glm.pred==Direction)
+```
